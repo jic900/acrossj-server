@@ -1,0 +1,38 @@
+{
+  "name": "acrossj-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "API server for ACrossJ project",
+  "scripts": {
+    "start": "node app.js",
+    "postinstall": "winser -i -s -c",
+    "preuninstall": "winser -r -x -s",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "predeploy": "echo \"Error: no predeploy specified",
+    "postdeploy": "echo \"Error: no postdeploy specified",
+    "prepublish": "echo \"Error: no prepublish specified"
+  },
+  "dependencies": {
+    "express": "~4.14.1",
+    "express-session": "~1.15.1",
+    "http-status-codes": "~1.1.6",
+    "body-parser": "~1.16.1",
+    "mongoose": "~4.8.4",
+    "morgan": "~1.8.1",
+    "winston": "~2.3.1",
+    "dateformat": "~2.0.0",
+    "node-string-pad": "~0.0.4",
+    "bcrypt": "~1.0.2",
+    "async": "~2.1.5",
+    "jsonwebtoken": "~7.3.0",
+    "lodash": "latest",
+    "winser": "~1.0.2"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:jic900/ACrossJ.git"
+  },
+  "author": "Jia Chen & Qing Zhu",
+  "license": "MIT"
+}
