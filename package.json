@@ -5,8 +5,6 @@
   "description": "API server for ACrossJ project",
   "scripts": {
     "start": "node app.js",
-    "postinstall": "winser -i -s -c",
-    "preuninstall": "winser -r -x -s",
     "test": "echo \"Error: no test specified\" && exit 1",
     "predeploy": "echo \"Error: no predeploy specified",
     "postdeploy": "echo \"Error: no postdeploy specified",
