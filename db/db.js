@@ -46,8 +46,6 @@ fs.readdirSync(APP_BASE + '/models').forEach(function(name){
 
 module.exports = mongoose;
 
-exports.close = function() {
-    mongoose.connection.close(function () {
-        logger.info('Mongoose connection closed');
-    });
+module.exports.close = function() {
+    mongoose.connection.close(function() {});
 }

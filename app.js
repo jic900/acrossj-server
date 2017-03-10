@@ -11,16 +11,20 @@ var logger = require(APP_BASE + '/utils/logger')(module.filename);
 var cluster = require('cluster');
 var cpuCount = config.NODE_ENV !== 'development' ? require('os').cpus().length : 1;
 
-var pm2ExecMode = function() {
+var pm2Enabled = function() {
     var fs = require('fs');
-    if (fs.existsSync(config.PM2_CONFIG_FILE)) {
+    return fs.existsSync(config.PM2_CONFIG_FILE);
+}
+
+var pm2ExecMode = function() {
+    if (pm2Enabled()) {
         var pm2Config = require(config.PM2_CONFIG_FILE);
         return pm2Config.apps[0].exec_mode;
     }
     return undefined;
 };
 
-if (pm2ExecMode === 'cluster') {
+if (pm2ExecMode() === 'cluster') {
     logger.info('PM2 cluster mode enabled. Starting acrossj server.');
     require(APP_BASE + '/server/server');
 } else {

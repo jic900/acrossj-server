@@ -25,7 +25,7 @@ module.exports = function(callingModule) {
         var level = !options.colorize ? '[' + paddedLevel + ']' : '[' + winston.config.colorize(options.level, paddedLevel) + ']';
         var pid = '[PID-' + pad(process.pid.toString(), 5) + ']';
         var callerName = '[' + getCallerName(callingModule) + ']';
-        var timestamp = dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss");
+        var timestamp = dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss:l");
         return timestamp + level + pid + callerName + ' ' + (options.message !== undefined ? options.message : '');
     };
 

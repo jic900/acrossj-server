@@ -72,6 +72,8 @@ var errHandler = function(err, req, res, next) {
 server.use(apiNotImplemented);
 server.use(errHandler);
 
+process.send = process.send || function() {};
+
 // Server start and shutdown
 server.set('port', config.APP_PORT || 10007);
 var http_server = server.listen(server.get('port'), function() {
