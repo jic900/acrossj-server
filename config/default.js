@@ -4,7 +4,7 @@
 
 module.exports = {
     APP_PORT : 10007,
-    PM2_CONFIG_FILE : process.env.PM2_HOME + '/config/ecosystem.config.js',
+    PM2_CONFIG_FILE : process.cwd() + '/ecosystem.config.js',
     DB_URL : 'mongodb://localhost:27017/acrossj',
     LOG_DIR : process.cwd() + '/logs',
     LOG_FILE_LEVEL : 'info',

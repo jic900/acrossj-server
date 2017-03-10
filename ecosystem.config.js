@@ -5,6 +5,7 @@ module.exports = {
      */
     apps: [{
         name: "acrossj-server",
+        cwd: "C:\\qiz264\\projects\\acrossj\\acrossj-server",
         script: "app.js",
         kill_timeout: 3000,
         wait_ready: true,
@@ -14,8 +15,8 @@ module.exports = {
         ignore_watch: ["node_modules", "logs"],
         max_memory_restart: "256M",
 //        log_file: "combined.outerr.log",
-        out_file: "output.log",
-        error_file: "error.log",
+//        out_file: "output.log",
+//        error_file: "error.log",
 //        log_date_format: "",
 //        merge_logs: true,
 //        pid_file: "",
