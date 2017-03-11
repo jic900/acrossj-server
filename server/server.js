@@ -97,6 +97,7 @@ process.on('SIGINT', function() {
 });
 
 process.on('message', function(msg) {
+    logger.debug('Received message: ' + msg);
     if (msg == 'shutdown') {
         serverShutdown();
     }

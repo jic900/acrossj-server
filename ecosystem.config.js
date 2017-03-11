@@ -5,20 +5,20 @@ module.exports = {
      */
     apps: [{
         name: "acrossj-server",
-        cwd: "C:\\qiz264\\projects\\acrossj\\acrossj-server",
+        cwd: process.env.ACROSSJ_HOME + "/acrossj-server",
         script: "app.js",
         kill_timeout: 3000,
         wait_ready: true,
         instances: 2,
         exec_mode: "cluster",
-        watch: ["config", "db", "models", "resources", "routes", "server", "utils"],
+        watch: ["app.js", "config", "db", "models", "resources", "routes", "server", "utils"],
         ignore_watch: ["node_modules", "logs"],
         max_memory_restart: "256M",
 //        log_file: "combined.outerr.log",
 //        out_file: "output.log",
 //        error_file: "error.log",
 //        log_date_format: "",
-//        merge_logs: true,
+        merge_logs: true,
 //        pid_file: "",
         env: {
             NODE_ENV: "development"
