@@ -29,7 +29,7 @@
   "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "git@github.com:jic900/ACrossJ.git"
+    "url": "git@github.com:jic900/acrossj-server.git"
   },
   "author": "Jia Chen & Qing Zhu",
   "license": "MIT"

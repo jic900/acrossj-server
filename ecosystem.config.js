@@ -32,8 +32,8 @@ module.exports = {
      * Deployment section
      * http://pm2.keymetrics.io/docs/usage/deployment/
      */
-    /*
     deploy: {
+        /*
         production: {
             user: "node",
             host: "212.83.163.1",
@@ -42,17 +42,19 @@ module.exports = {
             path: "/var/www/production",
             "post-deploy": "npm install && pm2 startOrRestart ecosystem.config.js --env production"
         },
-        dev: {
-            user: "node",
-            host: "212.83.163.1",
+        */
+        development: {
+            user: "qiz264",
+            host: "192.168.86.155",
+//            key: "$HOME/.ssh/id_rsa",
             ref: "origin/master",
-            repo: "git@github.com:repo.git",
-            path: "/var/www/development",
-            "post-deploy": "npm install && pm2 startOrRestart ecosystem.config.js --env dev",
+            repo: "git@github.com:jic900/acrossj-server.git",
+            path: "/var/local/acrossj/development",
+            "post-setup": "ls -la",
+            "post-deploy": "npm install && pm2 startOrRestart ecosystem.config.js --env development",
             env: {
-                NODE_ENV: "dev"
+                NODE_ENV: "development"
             }
         }
     }
-    */
 }
