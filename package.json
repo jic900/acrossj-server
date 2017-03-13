@@ -5,10 +5,7 @@
   "description": "API server for ACrossJ project",
   "scripts": {
     "start": "node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "predeploy": "echo \"Error: no predeploy specified",
-    "postdeploy": "echo \"Error: no postdeploy specified",
-    "prepublish": "echo \"Error: no prepublish specified"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "express": "~4.14.1",

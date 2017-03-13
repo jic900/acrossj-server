@@ -45,13 +45,13 @@ module.exports = {
         */
         development: {
             user: "qiz264",
-            host: "192.168.86.155",
+            host: "192.168.86.156",
 //            key: "$HOME/.ssh/id_rsa",
             ref: "origin/master",
             repo: "git@github.com:jic900/acrossj-server.git",
-            path: "/var/local/acrossj/development",
+            path: "/var/www/acrossj/development",
             "post-setup": "ls -la",
-            "post-deploy": "npm install && pm2 startOrRestart ecosystem.config.js --env development",
+            "post-deploy": "npm install && pm2 startOrGracefulReload ecosystem.config.js --env development",
             env: {
                 NODE_ENV: "development"
             }
