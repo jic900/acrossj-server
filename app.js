@@ -4,7 +4,8 @@
 
 'use strict';
 
-var APP_BASE = __dirname;
+process.env.NODE_PATH = __dirname;
+var APP_BASE = process.env.NODE_PATH;
 var config = require(APP_BASE + '/config');
 var logger = require(APP_BASE + '/utils/logger')(module.filename);
 

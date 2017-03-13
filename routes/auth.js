@@ -4,7 +4,7 @@
 
 'use strict';
 
-var APP_BASE = process.cwd();
+var APP_BASE = process.env.NODE_PATH;
 var config = require(APP_BASE + '/config');
 var logger = require(APP_BASE + '/utils/logger')(module.filename);
 logger.debug('Initializing auth');

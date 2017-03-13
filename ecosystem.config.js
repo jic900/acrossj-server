@@ -5,11 +5,11 @@ module.exports = {
      */
     apps: [{
         name: "acrossj-server",
-        cwd: process.env.ACROSSJ_HOME + "/acrossj-server",
+//        cwd: process.env.ACROSSJ_HOME + "/acrossj-server",
         script: "app.js",
         kill_timeout: 3000,
         wait_ready: true,
-        instances: 2,
+        instances: 1,
         exec_mode: "cluster",
         watch: ["app.js", "config", "db", "models", "resources", "routes", "server", "utils"],
         ignore_watch: ["node_modules", "logs"],
