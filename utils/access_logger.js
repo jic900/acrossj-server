@@ -4,7 +4,7 @@
 
 'use strict';
 
-var APP_BASE = process.cwd();
+var APP_BASE = process.env.NODE_PATH;
 var config = require(APP_BASE + '/config');
 var winston = require('winston');
 var pad = require('node-string-pad');

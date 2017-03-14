@@ -26,7 +26,7 @@ var pm2ExecMode = function() {
 };
 
 if (pm2ExecMode() === 'cluster') {
-    logger.info('PM2 cluster mode enabled. Starting acrossj server.');
+    logger.info('PM2 cluster mode enabled. Starting acrossj server instance.');
     require(APP_BASE + '/server/server');
 } else {
     if (cluster.isMaster) {

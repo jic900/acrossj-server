@@ -72,7 +72,7 @@ var errHandler = function(err, req, res, next) {
 server.use(apiNotImplemented);
 server.use(errHandler);
 
-process.send = process.send || function() {};
+//process.send = process.send || function() {};
 
 // Server start and shutdown
 server.set('port', config.APP_PORT || 10007);
@@ -86,9 +86,12 @@ gracefulShutdown(http_server);
 
 var serverShutdown = function() {
     db.close();
-    logger.debug('ACrossJ server worker shutting down');
+    logger.debug('ACrossJ server instance shutting down');
     http_server.shutdown();
-    process.exit(0);
+    var exitTimer = setTimeout(function() {
+        process.exit(0);
+    }, 5000);
+    exitTimer.unref();
 };
 
 // Gracefully shut down server when the Node process ends
@@ -97,7 +100,6 @@ process.on('SIGINT', function() {
 });
 
 process.on('message', function(msg) {
-    logger.debug('Received message: ' + msg);
     if (msg == 'shutdown') {
         serverShutdown();
     }

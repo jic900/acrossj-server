@@ -4,9 +4,9 @@
 
 module.exports = {
     APP_PORT : 10007,
-    PM2_CONFIG_FILE : process.env.PM2_HOME + '/config/ecosystem.config.js',
+    PM2_CONFIG_FILE : process.env.NODE_PATH + '/ecosystem.config.js',
     DB_URL : 'mongodb://localhost:27017/acrossj',
-    LOG_DIR : process.cwd() + '/logs',
+    LOG_DIR : process.env.NODE_PATH + '/logs',
     LOG_FILE_LEVEL : 'info',
     LOG_CONSOLE_LEVEL : 'info',
     ACCESS_LOG_FORMAT : ':remote-addr :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :response-time :res[content-length]',

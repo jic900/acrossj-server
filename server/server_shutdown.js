@@ -64,7 +64,7 @@ function gracefulShutdown(server) {
     // });
 
     function shutdown(force, callback) {
-        logger.debug('HTTP server closing');
+        logger.debug('HTTP server stopping');
         isShuttingDown = true;
 
         server.close(function(err) {

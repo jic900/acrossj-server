@@ -4,9 +4,9 @@
 
 'use strict';
 
-module.exports = function(callingModule) {
+module.exports = function (callingModule) {
 
-    var APP_BASE = process.cwd();
+    var APP_BASE = process.env.NODE_PATH;
     var config = require(APP_BASE + '/config');
     var winston = require('winston');
     var fs = require('fs');
@@ -15,8 +15,9 @@ module.exports = function(callingModule) {
 
     fs.existsSync(config.LOG_DIR) || fs.mkdirSync(config.LOG_DIR);
 
-    var getCallerName = function(caller) {
-        var parts = caller.split('\\');
+    var getCallerName = function (caller) {
+        var delimiter = process.platform === 'linux' ? '/' : '\\';
+        var parts = caller.split(delimiter);
         return parts[parts.length - 2] + '/' + parts.pop();
     };
 
@@ -34,6 +35,7 @@ module.exports = function(callingModule) {
             prettyPrint: true,
             json: false,
             colorize: true,
+            stderrLevels: ['error'],
             formatter: formatter
         }),
         transportFile = new winston.transports.File({
@@ -48,14 +50,14 @@ module.exports = function(callingModule) {
         transportErrorFile = new winston.transports.File({
             filename: config.LOG_DIR + '/acrossj-server-errors.log',
             prettyPrint: true,
-            json:false,
+            json: false,
             formatter: formatter,
             maxsize: 5242880, //5MB
             maxFiles: 10
         });
 
     winston.addColors({
-        fatal: ['red','bold'],
+        fatal: ['red', 'bold'],
         error: 'red',
         warn: 'yellow',
         info: 'blue',
@@ -63,7 +65,7 @@ module.exports = function(callingModule) {
         trace: 'cyan'
     });
 
-    var logger = new(winston.Logger)({
+    var logger = new (winston.Logger)({
         levels: {
             fatal: 0,
             error: 1,
