@@ -45,7 +45,7 @@ module.exports = {
         */
         development: {
             user: "qiz264",
-            host: "192.168.86.156",
+            host: "192.168.86.157",
 //            key: "$HOME/.ssh/id_rsa",
             ref: "origin/master",
             repo: "git@github.com:jic900/acrossj-server.git",

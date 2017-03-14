@@ -88,8 +88,8 @@ var serverShutdown = function() {
     db.close();
     logger.debug('ACrossJ server instance shutting down');
     http_server.shutdown();
-    var exitTimer = setTimeout(function() {
-        process.exit(0);
+    var exitTimer = setTimeout(function(err) {
+        process.exit(err ? 1 : 0);
     }, 5000);
     exitTimer.unref();
 };
