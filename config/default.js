@@ -3,15 +3,40 @@
  */
 
 module.exports = {
-    APP_PORT : 10007,
+    SERVER: {
+        DOMAIN_HOST: '68.149.121.215',
+        DOMAIN_PORT: '8080',
+        HOST: 'localhost',
+        PORT: 10007
+    },
+    DB: {
+        HOST: 'localhost',
+        PORT: 27017,
+        DATABASE: 'acrossj',
+        URL: 'mongodb://localhost:27017/acrossj'
+    },
+    LOG: {
+        DIR: process.env.NODE_PATH + '/logs',
+        FILE_LEVEL : 'info',
+        CONSOLE_LEVEL : 'info',
+        ACCESS_LOG_FORMAT : ':remote-addr :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :response-time :res[content-length]',
+    },
+    JWT: {
+        SALT_WORK_FACTOR : 10,
+        SECRET: 'revresjssorca',
+        PRIVATE_KEY: '37LvDSm4XvjYOh9Y',
+        TOKEN_EXPIRY: '24 hours'
+        // TOKEN_EXPIRY: 1 * 30 * 1000 * 60 //1 hour
+    },
+    EMAIL: {
+        USER: 'acrossj1007@gmail.com',
+        // PASSWORD: "roundpeach",
+        CLIENT_ID: '565222472091-lnanmfgtbbh6du9jij45epv98ip82ms3.apps.googleusercontent.com',
+        CLIENT_SECRET: 'qeP-lDWxSPgAp-5nzTPyYga0',
+        REFRESH_TOKEN: '1/nwFO3QGZYLpx22WxFjLggJDccJ8gI4KR8CbCYQ6WVEXkzmLJfvh4ipV1uP_1NFjC',
+        VERIFY_EMAIL_URL: 'verifyEmail',
+        RESET_PASSWORD_URL: 'resetPassword'
+    },
     PM2_CONFIG_FILE : process.env.NODE_PATH + '/ecosystem.config.js',
-    DB_URL : 'mongodb://localhost:27017/acrossj',
-    LOG_DIR : process.env.NODE_PATH + '/logs',
-    LOG_FILE_LEVEL : 'info',
-    LOG_CONSOLE_LEVEL : 'info',
-    ACCESS_LOG_FORMAT : ':remote-addr :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :response-time :res[content-length]',
     NODE_ENV : process.env.NODE_ENV || 'development',
-    SALT_WORK_FACTOR : 10,
-    JWT_SECRET : 'revresjssorca',
-    JWT_EXPIRE : 1440
 };

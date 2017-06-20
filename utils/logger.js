@@ -6,32 +6,32 @@
 
 module.exports = function (callingModule) {
 
-    var APP_BASE = process.env.NODE_PATH;
-    var config = require(APP_BASE + '/config');
-    var winston = require('winston');
-    var fs = require('fs');
-    var dateFormat = require('dateformat');
-    var pad = require('node-string-pad');
+    const APP_BASE = process.env.NODE_PATH;
+    const config = require(APP_BASE + '/config');
+    const winston = require('winston');
+    const fs = require('fs');
+    const dateFormat = require('dateformat');
+    const pad = require('node-string-pad');
 
-    fs.existsSync(config.LOG_DIR) || fs.mkdirSync(config.LOG_DIR);
+    fs.existsSync(config.LOG.DIR) || fs.mkdirSync(config.LOG.DIR);
 
-    var getCallerName = function (caller) {
-        var delimiter = process.platform === 'linux' ? '/' : '\\';
-        var parts = caller.split(delimiter);
+    const getCallerName = function (caller) {
+        const delimiter = process.platform === 'linux' ? '/' : '\\';
+        let parts = caller.split(delimiter);
         return parts[parts.length - 2] + '/' + parts.pop();
     };
 
-    var formatter = function (options) {
-        var paddedLevel = pad(options.level.toUpperCase(), 5);
-        var level = !options.colorize ? '[' + paddedLevel + ']' : '[' + winston.config.colorize(options.level, paddedLevel) + ']';
-        var pid = '[PID-' + pad(process.pid.toString(), 5) + ']';
-        var callerName = '[' + getCallerName(callingModule) + ']';
-        var timestamp = dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss:l");
+    const formatter = function (options) {
+        const paddedLevel = pad(options.level.toUpperCase(), 5);
+        const level = !options.colorize ? '[' + paddedLevel + ']' : '[' + winston.config.colorize(options.level, paddedLevel) + ']';
+        const pid = '[PID-' + pad(process.pid.toString(), 5) + ']';
+        const callerName = '[' + getCallerName(callingModule) + ']';
+        const timestamp = dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss:l");
         return timestamp + level + pid + callerName + ' ' + (options.message !== undefined ? options.message : '');
     };
 
-    var transportConsole = new winston.transports.Console({
-            level: config.LOG_CONSOLE_LEVEL,
+    const transportConsole = new winston.transports.Console({
+            level: config.LOG.CONSOLE_LEVEL,
             prettyPrint: true,
             json: false,
             colorize: true,
@@ -39,8 +39,8 @@ module.exports = function (callingModule) {
             formatter: formatter
         }),
         transportFile = new winston.transports.File({
-            level: config.LOG_FILE_LEVEL,
-            filename: config.LOG_DIR + '/acrossj-server.log',
+            level: config.LOG.FILE_LEVEL,
+            filename: config.LOG.DIR + '/acrossj-server.log',
             prettyPrint: true,
             json: false,
             formatter: formatter,
@@ -48,7 +48,7 @@ module.exports = function (callingModule) {
             maxFiles: 10
         }),
         transportErrorFile = new winston.transports.File({
-            filename: config.LOG_DIR + '/acrossj-server-errors.log',
+            filename: config.LOG.DIR + '/acrossj-server-errors.log',
             prettyPrint: true,
             json: false,
             formatter: formatter,
@@ -65,7 +65,7 @@ module.exports = function (callingModule) {
         trace: 'cyan'
     });
 
-    var logger = new (winston.Logger)({
+    const logger = new (winston.Logger)({
         levels: {
             fatal: 0,
             error: 1,

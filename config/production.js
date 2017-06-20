@@ -3,6 +3,8 @@
  */
 
 module.exports = {
-    LOG_FILE_LEVEL : 'error',
-    LOG_CONSOLE_LEVEL : 'error'
+    LOG: {
+        FILE_LEVEL : 'error',
+        CONSOLE_LEVEL : 'error'
+    }
 };

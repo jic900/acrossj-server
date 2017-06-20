@@ -4,15 +4,15 @@
 
 'use strict';
 
-var APP_BASE = process.env.NODE_PATH;
-var logger = require(APP_BASE + '/utils/logger')(module.filename);
+const APP_BASE = process.env.NODE_PATH;
+const logger = require(APP_BASE + '/utils/logger')(module.filename);
 logger.trace('Initializing api.user');
 
 
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-var User = require(APP_BASE + '/models/user');
+const User = require(APP_BASE + '/models/user');
 
 //var jwt    = require('jsonwebtoken'); // used to create, sign, and verify tokens
 
@@ -29,7 +29,7 @@ router.route('/')
     })
     // Create a new user
     .post(function(req, res, next){
-        var user = new User(req.body);
+        const user = new User(req.body);
         user.save(function(err){
             if(err) {
                 next(err);

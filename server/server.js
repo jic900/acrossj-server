@@ -1,33 +1,31 @@
 /**
  * Created by E84266 on 3/1/2017.
  */
-
-/**
- * Created by E84266 on 2/24/2017.
- */
-
 'use strict';
 
-var APP_BASE = process.env.NODE_PATH;
-var config = require(APP_BASE + '/config');
+const APP_BASE = process.env.NODE_PATH;
+const config = require(APP_BASE + '/config');
 
-var express = require('express');
-var server = express();
+const express = require('express');
+const server = express();
 
 // Set up loggers
-var logger = require(APP_BASE + '/utils/logger')(module.filename);
-var access_logger = require(APP_BASE + '/utils/access_logger');
-var morgan = require('morgan');
-server.use(morgan(config.ACCESS_LOG_FORMAT, {stream: access_logger.stream}));
+const logger = require(APP_BASE + '/utils/logger')(module.filename);
+const access_logger = require(APP_BASE + '/utils/access_logger');
+const morgan = require('morgan');
+server.use(morgan(config.LOG.ACCESS_LOG_FORMAT, {stream: access_logger.stream}));
 
 // Check db
-var db = require(APP_BASE +'/db/db');
-var httpStatus = require('http-status-codes');
-var dbCheck = function(req, res, next) {
-    if (db.connection.readyState !== 1) {
-        var msg = httpStatus.getStatusText(httpStatus.SERVICE_UNAVAILABLE) + ' : Mongo Database';
-        res.status(httpStatus.SERVICE_UNAVAILABLE);
-        next(new Error(msg));
+const db = require(APP_BASE +'/db/db').db;
+const httpStatus = require('http-status-codes');
+const dbCheck = function(req, res, next) {
+    if (db.readyState !== 1) {
+        // res.status(httpStatus.SERVICE_UNAVAILABLE);
+        const error = {
+            status: httpStatus.SERVICE_UNAVAILABLE,
+            message: 'Database is currently not available'
+        };
+        next(error);
     } else {
         next();
     }
@@ -35,7 +33,7 @@ var dbCheck = function(req, res, next) {
 server.use(dbCheck);
 
 // Fix cross domain issue
-var allowCrossDomain = function(req, res, next) {
+const allowCrossDomain = function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     next();
@@ -43,31 +41,44 @@ var allowCrossDomain = function(req, res, next) {
 server.use(allowCrossDomain);
 
 // Set up request body parser
-var body_parser  = require('body-parser');
-server.use(body_parser.urlencoded({ extended: true }));
+const body_parser = require('body-parser');
+server.use(body_parser.urlencoded({extended: true}));
 server.use(body_parser.json());
 
-// Define API routes
-require(APP_BASE + "/routes/routes")(server);
+// Handle browser built-in favicon call
+const favicon = require('serve-favicon');
+server.use(favicon(APP_BASE + '/static/images/favicon.ico'));
+
+// Define routes
+// const router = express.Router();
+// require(APP_BASE + "/routes/routes")(router);
+server.use(require(APP_BASE + "/routes"));
 
 // Define static resources
-var path = require("path");
-server.use(express.static(path.join(APP_BASE, 'resources')));
+const path = require("path");
+server.use(express.static(path.join(APP_BASE, 'static')));
 
 // Error handling
-var apiNotImplemented = function(req, res, next) {
-    var msg = httpStatus.getStatusText(httpStatus.NOT_IMPLEMENTED) + ' : ' + req.url;
-    res.status = httpStatus.NOT_IMPLEMENTED;
-    next(new Error(msg));
+const apiNotImplemented = function(req, res, next) {
+    // const msg = httpStatus.getStatusText(httpStatus.NOT_IMPLEMENTED) + ': ' + req.url;
+    const msg = `API Not implemented: HTTP ${req.method} ${req.url}`;
+    // res.status(httpStatus.NOT_IMPLEMENTED);
+    const error = {
+        status: httpStatus.NOT_IMPLEMENTED,
+        message: msg
+    }
+    next(error);
 };
-var errHandler = function(err, req, res, next) {
+
+const errHandler = function(err, req, res, next) {
     logger.error(err.stack);
     res.status(err.status || httpStatus.INTERNAL_SERVER_ERROR);
-    var returnedErr = config.NODE_ENV === 'development' ? err : {};
-    res.json({
-        message: err.message,
-        error: returnedErr
-    });
+    res.json(err);
+    // const returnedErr = config.NODE_ENV === 'development' ? err : {};
+    // res.json({
+    //     message: err.message,
+    //     error: returnedErr
+    // });
 };
 server.use(apiNotImplemented);
 server.use(errHandler);
@@ -75,20 +86,20 @@ server.use(errHandler);
 //process.send = process.send || function() {};
 
 // Server start and shutdown
-server.set('port', config.APP_PORT || 10007);
-var http_server = server.listen(server.get('port'), function() {
+server.set('port', config.SERVER.PORT || 10007);
+const http_server = server.listen(server.get('port'), function() {
     logger.debug('ACrossJ server listening on port ' + http_server.address().port);
     process.send('ready');
 });
 
-var gracefulShutdown = require('./server_shutdown');
+const gracefulShutdown = require('./server_shutdown');
 gracefulShutdown(http_server);
 
-var serverShutdown = function() {
-    db.close();
+const serverShutdown = function() {
+    db.close(function() {});
     logger.debug('ACrossJ server instance shutting down');
     http_server.shutdown();
-    var exitTimer = setTimeout(function(err) {
+    const exitTimer = setTimeout(function(err) {
         process.exit(err ? 1 : 0);
     }, 5000);
     exitTimer.unref();

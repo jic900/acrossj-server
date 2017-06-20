@@ -3,6 +3,8 @@
  */
 
 module.exports = {
-    LOG_FILE_LEVEL : 'trace',
-    LOG_CONSOLE_LEVEL : 'trace'
+    LOG: {
+        FILE_LEVEL : 'trace',
+        CONSOLE_LEVEL : 'trace'
+    }
 };

@@ -4,10 +4,10 @@
 
 'use strict';
 
-var APP_BASE = process.env.NODE_PATH;
-var logger = require(APP_BASE + '/utils/logger')(module.filename);
+const APP_BASE = process.env.NODE_PATH;
+const logger = require(APP_BASE + '/utils/logger')(module.filename);
 
-var http = require('http');
+const http = require('http');
 //var https = require('https');
 
 exports = module.exports = gracefulShutdown;
@@ -17,9 +17,9 @@ exports = module.exports = gracefulShutdown;
  * @param {http.Server} server The server to add shutdown functionality to
  */
 function gracefulShutdown(server) {
-    var connections = {};
-    var isShuttingDown = false;
-    var connectionCounter = 0;
+    let connections = {};
+    let isShuttingDown = false;
+    let connectionCounter = 0;
 
     function destroy(socket, force) {
         if (force || (socket._isIdle && isShuttingDown)) {
@@ -29,7 +29,7 @@ function gracefulShutdown(server) {
     };
 
     function onConnection(socket) {
-        var id = connectionCounter++;
+        const id = connectionCounter++;
         socket._isIdle = true;
         socket._connectionId = id;
         connections[id] = socket;

@@ -5,21 +5,21 @@
 'use strict';
 
 process.env.NODE_PATH = __dirname;
-var APP_BASE = process.env.NODE_PATH;
-var config = require(APP_BASE + '/config');
-var logger = require(APP_BASE + '/utils/logger')(module.filename);
+const APP_BASE = process.env.NODE_PATH;
+const config = require(APP_BASE + '/config');
+const logger = require(APP_BASE + '/utils/logger')(module.filename);
 
-var cluster = require('cluster');
-var cpuCount = config.NODE_ENV !== 'development' ? require('os').cpus().length : 1;
+const cluster = require('cluster');
+const cpuCount = config.NODE_ENV !== 'development' ? require('os').cpus().length : 1;
 
-var pm2Enabled = function() {
-    var fs = require('fs');
+const pm2Enabled = function() {
+    const fs = require('fs');
     return fs.existsSync(config.PM2_CONFIG_FILE);
 }
 
-var pm2ExecMode = function() {
+const pm2ExecMode = function() {
     if (pm2Enabled()) {
-        var pm2Config = require(config.PM2_CONFIG_FILE);
+        const pm2Config = require(config.PM2_CONFIG_FILE);
         return pm2Config.apps[0].exec_mode;
     }
     return undefined;
@@ -31,7 +31,7 @@ if (pm2ExecMode() === 'cluster') {
 } else {
     if (cluster.isMaster) {
         logger.info('PM2 cluster mode disabled. Starting node cluster.');
-        for (var i = 0; i < cpuCount; i += 1) {
+        for (let i = 0; i < cpuCount; i += 1) {
             cluster.fork();
         }
         cluster.on('exit', function(server) {

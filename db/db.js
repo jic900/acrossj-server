@@ -4,13 +4,12 @@
 
 'use strict';
 
+const APP_BASE = process.env.NODE_PATH;
+const config = require(APP_BASE + '/config');
+const logger = require(APP_BASE + '/utils/logger')(module.filename);
+const mongoose = require('mongoose');
 
-var APP_BASE = process.env.NODE_PATH;
-var config = require(APP_BASE + '/config');
-var logger = require(APP_BASE + '/utils/logger')(module.filename);
-var mongoose = require('mongoose');
-
-var connectOptions = {
+const connectOptions = {
     server:{
         socketOptions:{
 //            connectTimeoutMS: 15000,
@@ -20,32 +19,43 @@ var connectOptions = {
     }
 }
 
-mongoose.connect(config.DB_URL, connectOptions);
+mongoose.connect(config.DB.URL, connectOptions);
 
-mongoose.connection.on('connecting', function () {
-    logger.info('Mongoose connecting to ' + config.DB_URL);
+const connection = mongoose.connection;
+
+connection.on('connecting', function () {
+    logger.info('Mongoose connecting to ' + config.DB.URL);
 });
 
-mongoose.connection.on('connected', function () {
-    logger.info('Mongoose connection open to ' + config.DB_URL);
+connection.on('connected', function () {
+    logger.info('Mongoose connection open to ' + config.DB.URL);
 });
 
-mongoose.connection.on('error',function (err) {
+connection.on('error',function (err) {
     logger.error('Mongoose connection error: ' + err);
 });
 
-mongoose.connection.on('disconnected', function () {
+connection.on('disconnected', function () {
     logger.info('Mongoose connection disconnected');
 });
 
-var fs = require('fs');
-fs.readdirSync(APP_BASE + '/models').forEach(function(name){
-    var model = name.substring(0, name.indexOf('.'));
-    require(APP_BASE + '/models/' + model);
-});
+// const fs = require('fs');
+// fs.readdirSync(APP_BASE + '/models').forEach(function(name){
+//     var model = name.substring(0, name.indexOf('.'));
+//     require(APP_BASE + '/models/' + model);
+// });
 
-module.exports = mongoose;
+const uniqueValidator = require('mongoose-unique-validator');
+const autoIncrement = require('mongoose-auto-increment');
+autoIncrement.initialize(connection);
 
-module.exports.close = function() {
-    mongoose.connection.close(function() {});
-}
+exports.db = connection;
+exports.uniqueValidator = uniqueValidator;
+exports.autoIncrement = autoIncrement;
+
+
+// module.exports = mongoose;
+//
+// module.exports.close = function() {
+//     mongoose.connection.close(function() {});
+// }
