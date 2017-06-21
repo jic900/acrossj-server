@@ -34,8 +34,8 @@ module.exports = {
         CLIENT_ID: '565222472091-lnanmfgtbbh6du9jij45epv98ip82ms3.apps.googleusercontent.com',
         CLIENT_SECRET: 'qeP-lDWxSPgAp-5nzTPyYga0',
         REFRESH_TOKEN: '1/nwFO3QGZYLpx22WxFjLggJDccJ8gI4KR8CbCYQ6WVEXkzmLJfvh4ipV1uP_1NFjC',
-        VERIFY_EMAIL_URL: 'verifyEmail',
-        RESET_PASSWORD_URL: 'resetPassword'
+        VERIFY_EMAIL_URL: 'auth/verifyEmail',
+        RESET_PASSWORD_URL: 'auth/resetPassword'
     },
     PM2_CONFIG_FILE : process.env.NODE_PATH + '/ecosystem.config.js',
     NODE_ENV : process.env.NODE_ENV || 'development',

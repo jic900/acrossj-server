@@ -27,7 +27,7 @@ router.route('/forgotPassword')
 
 router.route('/verifyEmail')
     .get(function(req, res, next) {
-
+        res.send(`<h1>Email Verified</h1>`);
     });
 
 router.route('/resetPassword')
