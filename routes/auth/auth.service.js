@@ -8,27 +8,37 @@ const APP_BASE = process.env.NODE_PATH;
 const logger = require(APP_BASE + '/utils/logger')(module.filename);
 const config = require(APP_BASE + '/config');
 const nodemailer = require("nodemailer");
-const xoauth2 = require("xoauth2");
+// const xoauth2 = require("xoauth2");
 // const crypto = require('crypto');
 // const algorithm = 'aes-256-ctr';
 // const privateKey = config.JWT.PRIVATE_KEY;
 
-
-const xoauth2gen = xoauth2.createXOAuth2Generator({
-    user: config.EMAIL.USER,
-    clientId: config.EMAIL.CLIENT_ID,
-    clientSecret: config.EMAIL.CLIENT_SECRET,
-    refreshToken: config.EMAIL.REFRESH_TOKEN
-});
-
-xoauth2gen.on('token', function(token){
-    logger.debug('New token for %s: %s', token.user, token.accessToken);
-});
+// const xoauth2gen = xoauth2.createXOAuth2Generator({
+//     user: config.EMAIL.USER,
+//     clientId: config.EMAIL.CLIENT_ID,
+//     clientSecret: config.EMAIL.CLIENT_SECRET,
+//     refreshToken: config.EMAIL.REFRESH_TOKEN
+// });
+//
+// xoauth2gen.on('token', function(token){
+//     logger.debug('New token for %s: %s', token.user, token.accessToken);
+// });
+//
+// const smtpTransport = nodemailer.createTransport({
+//     service: 'gmail',
+//     auth: {
+//         xoauth2: xoauth2gen
+//     }
+// });
 
 const smtpTransport = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        xoauth2: xoauth2gen
+        type: 'OAuth2',
+        user: config.EMAIL.USER,
+        clientId: config.EMAIL.CLIENT_ID,
+        clientSecret: config.EMAIL.CLIENT_SECRET,
+        refreshToken: config.EMAIL.REFRESH_TOKEN
     }
 });
 

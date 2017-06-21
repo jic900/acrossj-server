@@ -12,9 +12,7 @@ const auth = require(APP_BASE + '/routes/auth/auth');
 
 router.route('/signup')
     .post(function(req, res, next) {
-        logger.debug(req);
-        res.json({status: 'good'});
-        // auth.signUp(req, res);
+        auth.signUp(req, res);
     });
 
 router.route('/signin')

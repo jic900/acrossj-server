@@ -15,15 +15,14 @@ const httpStatus = require('http-status-codes');
 const User = require(APP_BASE + '/models/user');
 
 exports.signUp = (req, res) => {
-    logger.debug(req.body);
     req.body.password = util.encrypt(req.body.password);
     async.waterfall([
         function (callback) {
-            logger.debug(req.body.password);
             User.createUser(req.body, (err, user) => {
                 if (!err) {
                     callback(null, user);
                 } else {
+                    logger.error(err.stack);
                     if (err.name === 'ValidationError') {
                         callback(util.getError('validation', httpStatus.UNPROCESSABLE_ENTITY, err, 'user'), null);
                     } else {
@@ -40,6 +39,7 @@ exports.signUp = (req, res) => {
             const token = jwt.sign(tokenData, config.JWT.PRIVATE_KEY, {expiresIn: config.JWT.TOKEN_EXPIRY});
             authService.sendVerifyMail(user, token, req.lang, (err, result) => {
                 if (err) {
+                    logger.error(err.stack);
                     callback(util.getError('verifyMailFailed', httpStatus.FORBIDDEN, err, null), null);
                 } else {
                     callback(null, {status: 'Success'});
@@ -49,7 +49,7 @@ exports.signUp = (req, res) => {
     ],
     function (err, result) {
         if (err) {
-            return res.status(err.statusCode).json(err);
+            return res.status(err.status).json(err);
         } else {
             res.json(result);
         }

@@ -71,7 +71,6 @@ User.plugin(autoIncrement.plugin, {
 
 User.statics = {
     createUser: function(requestData, callback) {
-        logger.debug(requestData);
         this.create(requestData, callback);
     },
     findAndUpdateUser: function(query, user, callback) {
