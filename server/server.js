@@ -6,6 +6,8 @@
 const APP_BASE = process.env.NODE_PATH;
 const config = require(APP_BASE + '/config');
 
+require('events').EventEmitter.defaultMaxListeners = 100;
+
 const express = require('express');
 const server = express();
 

@@ -13,11 +13,13 @@ router.get('/', function(req, res, next) {
     res.send('Welcome to ACrossJ');
 });
 
-router.use('/auth', require(APP_BASE + '/routes/auth'));
+// router.use('/auth', require(APP_BASE + '/routes/auth'));
+// router.use('/api/user', require(APP_BASE + '/routes/api/user'));
 
 const fs = require('fs');
 fs.readdirSync(APP_BASE + '/routes/api').forEach(function(name){
     const entity = name.substring(0, name.indexOf('.'));
+    logger.debug('Initializing ' + entity);
     router.use('/api/' + entity, require(APP_BASE + '/routes/api/' + entity));
 });
 

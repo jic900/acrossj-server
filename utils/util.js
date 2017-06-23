@@ -6,9 +6,39 @@ const APP_BASE = process.env.NODE_PATH;
 const logger = require(APP_BASE + '/utils/logger')(module.filename);
 const config = require(APP_BASE + '/config');
 const crypto = require('crypto');
+const nodemailer = require("nodemailer");
 const errors = require('properties-reader')(APP_BASE + '/resources/errors.properties');
 const algorithm = 'aes-256-ctr';
 const privateKey = config.JWT.PRIVATE_KEY;
+
+const smtpTransport = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        type: 'OAuth2',
+        user: config.EMAIL.USER,
+        clientId: config.EMAIL.CLIENT_ID,
+        clientSecret: config.EMAIL.CLIENT_SECRET,
+        refreshToken: config.EMAIL.REFRESH_TOKEN
+    }
+});
+
+exports.mail = (from, email, subject, mailbody, callback) => {
+    const mailOptions = {
+        from: from,
+        to: email, // list of receivers
+        subject: subject,
+        html: mailbody
+    };
+
+    smtpTransport.sendMail(mailOptions, function(error, response) {
+        if (error) {
+            callback(error, null);
+        } else{
+            callback(null, response);
+        }
+        smtpTransport.close();
+    });
+}
 
 exports.decrypt = (value) => {
     const decipher = crypto.createDecipher(algorithm, privateKey);
@@ -34,24 +64,6 @@ exports.getError = (name, statusCode, err, schema) => {
         error: err
     };
 }
-
-// exports.genericError = () => {
-//     return {
-//         statusCode: 500,
-//         error: {
-//             name: 'generic',
-//             message: errors.get('generic')
-//         }
-//     };
-// };
-//
-// exports.validationError = (err, schema) => {
-//     resetUniqueValidationError(err, schema);
-//     return {
-//         statusCode: 422,  // 422 UNPROCESSABLE ENTITY for validation errors
-//         error: err
-//     };
-// };
 
 function resetUniqueValidationError(err, schema) {
     if (err.name === 'ValidationError' && err.errors) {

@@ -8,7 +8,6 @@ const APP_BASE = process.env.NODE_PATH;
 const logger = require(APP_BASE + '/utils/logger')(module.filename);
 logger.trace('Initializing api.user');
 
-
 const express = require('express');
 const router = express.Router();
 
