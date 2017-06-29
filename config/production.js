@@ -6,5 +6,6 @@ module.exports = {
     LOG: {
         FILE_LEVEL : 'error',
         CONSOLE_LEVEL : 'error'
-    }
+    },
+    NODE_ENV : process.env.NODE_ENV || 'production',
 };

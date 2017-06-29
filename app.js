@@ -8,7 +8,6 @@ process.env.NODE_PATH = __dirname;
 const APP_BASE = process.env.NODE_PATH;
 const config = require(APP_BASE + '/config');
 const logger = require(APP_BASE + '/utils/logger')(module.filename);
-
 const cluster = require('cluster');
 const cpuCount = config.NODE_ENV !== 'development' ? require('os').cpus().length : 1;
 

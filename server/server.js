@@ -79,11 +79,9 @@ const errHandler = function(err, req, res, next) {
         logger.error(err.error.message);
     }
     res.status(err.status || httpStatus.INTERNAL_SERVER_ERROR);
-    if (process.env.NODE_ENV !== 'development' && config.NODE_ENV !== 'development') {
-        err.error = {
-            name: err.error.name,
-            message: err.error.message
-        }
+    const nodeEnv = process.env.NODE_ENV || config.NODE_ENV;
+    if (nodeEnv === 'production') {
+        err.error = {};
     }
     res.json(err);
 };

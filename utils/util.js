@@ -57,9 +57,10 @@ exports.getError = (name, statusCode, err, schema) => {
     if (err.name === 'ValidationError') {
         resetValidationError(err, schema);
     }
-    err.name = name;
     return {
         status: statusCode,
+        name: name,
+        message: getErrorMessage(err),
         error: err
     };
 }
@@ -72,6 +73,14 @@ function resetValidationError(err, schema) {
             const errorKey = `validation.${schema}.${field}.unique`;
             error.message = errors.get(errorKey);
         }
-        err.message = error.message;
     }
+}
+
+function getErrorMessage(err) {
+    if (err.name === 'ValidationError' && err.errors) {
+        const field = Object.keys(err.errors)[0];
+        const error = err.errors[field];
+        return error.message;
+    }
+    return err.message;
 }
