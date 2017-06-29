@@ -29,7 +29,6 @@ exports.mail = (from, email, subject, mailbody, callback) => {
         subject: subject,
         html: mailbody
     };
-
     smtpTransport.sendMail(mailOptions, function(error, response) {
         if (error) {
             callback(error, null);
@@ -55,8 +54,8 @@ exports.encrypt = (value) => {
 };
 
 exports.getError = (name, statusCode, err, schema) => {
-    if (name === 'ValidationError') {
-        resetUniqueValidationError(err, schema);
+    if (err.name === 'ValidationError') {
+        resetValidationError(err, schema);
     }
     err.name = name;
     return {
@@ -65,7 +64,7 @@ exports.getError = (name, statusCode, err, schema) => {
     };
 }
 
-function resetUniqueValidationError(err, schema) {
+function resetValidationError(err, schema) {
     if (err.name === 'ValidationError' && err.errors) {
         const field = Object.keys(err.errors)[0];
         const error = err.errors[field];
@@ -73,5 +72,6 @@ function resetUniqueValidationError(err, schema) {
             const errorKey = `validation.${schema}.${field}.unique`;
             error.message = errors.get(errorKey);
         }
+        err.message = error.message;
     }
 }
