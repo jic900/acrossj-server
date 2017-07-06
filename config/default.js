@@ -30,7 +30,6 @@ module.exports = {
     },
     EMAIL: {
         USER: 'acrossj1007@gmail.com',
-        // PASSWORD: "roundpeach",
         CLIENT_ID: '565222472091-lnanmfgtbbh6du9jij45epv98ip82ms3.apps.googleusercontent.com',
         CLIENT_SECRET: 'qeP-lDWxSPgAp-5nzTPyYga0',
         REFRESH_TOKEN: '1/nwFO3QGZYLpx22WxFjLggJDccJ8gI4KR8CbCYQ6WVEXkzmLJfvh4ipV1uP_1NFjC',

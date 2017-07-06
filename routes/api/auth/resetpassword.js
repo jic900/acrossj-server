@@ -34,7 +34,7 @@ router.route('/').post((req, res, next) => {
                     err = {message: 'The new password does not match the confirm password'};
                     next(util.getError('PasswordMisMatch', httpStatus.UNPROCESSABLE_ENTITY, err, null));
                 } else {
-                    user.password = authService.encrypt(req.body.newPassword);
+                    user.password = req.body.newPassword;
                     User.updateUser(user, (err, user) => {
                         if (!err) {
                             res.json({message: `Password changed successfully`});

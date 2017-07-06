@@ -25,10 +25,9 @@ const dbCheck = function(req, res, next) {
     if (db.readyState !== 1) {
         const error = {
             status: httpStatus.SERVICE_UNAVAILABLE,
-            error: {
-                name: 'DBUnavailable',
-                message: errors.get('common.db.unavailable')
-            }
+            name: 'DBUnavailable',
+            message: errors.get('common.db.unavailable'),
+            error: {}
         };
         next(error);
     } else {
@@ -64,10 +63,9 @@ server.use(express.static(path.join(APP_BASE, 'static')));
 const apiNotImplemented = function(req, res, next) {
     const error = {
         status: httpStatus.NOT_IMPLEMENTED,
-        error: {
-            name: 'APINotImplemented',
-            message: errors.get('common.api.not.implemented', [req.method, req.url])
-        }
+        name: 'APINotImplemented',
+        message: errors.get('common.api.not.implemented', [req.method, req.url]),
+        error: {}
     }
     next(error);
 };
@@ -76,7 +74,7 @@ const errHandler = function(err, req, res, next) {
     if (err.error.stack) {
         logger.error(err.error.stack);
     } else {
-        logger.error(err.error.message);
+        logger.error(err.message);
     }
     res.status(err.status || httpStatus.INTERNAL_SERVER_ERROR);
     const nodeEnv = process.env.NODE_ENV || config.NODE_ENV;
