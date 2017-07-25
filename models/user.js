@@ -52,7 +52,7 @@ const User = new Schema({
         type: Boolean,
         default: false
     }
-});
+}, {timestamps: true});
 
 User.pre('validate', function(next) {
     if (this.password && this.password.trim().length < 4) {
