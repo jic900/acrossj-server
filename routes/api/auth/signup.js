@@ -37,13 +37,16 @@ router.route('/').post((req, res, next) => {
                 if (err) {
                     callback(util.getError('SendVerifyMail', httpStatus.FORBIDDEN, err, null), null);
                 } else {
-                    callback(null, {status: 'Verify email successfully sent'});
+                    callback(null, {status: httpStatus.OK});
                 }
             });
         },
     ],
     function (err, result) {
         if (err) {
+            // setTimeout(() => {
+            //     next(err);
+            // }, 10000);
             next(err);
         } else {
             res.json(result);

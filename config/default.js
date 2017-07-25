@@ -25,7 +25,8 @@ module.exports = {
         SALT_WORK_FACTOR : 10,
         SECRET: 'revresjssorca',
         PRIVATE_KEY: '37LvDSm4XvjYOh9Y',
-        TOKEN_EXPIRY: '24 hours'
+        // TOKEN_EXPIRY: '24 hours',
+        TOKEN_EXPIRY: 86400    // 24 hours in seconds
         // TOKEN_EXPIRY: 1 * 30 * 1000 * 60 //1 hour
     },
     EMAIL: {

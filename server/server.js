@@ -39,7 +39,9 @@ server.use(dbCheck);
 // Fix cross domain issue
 const allowCrossDomain = function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    res.header("Access-Control-Max-Age", "86400");
+    res.header("Access-Control-Allow-Headers", "Origin, Accept, Content-Type, Authorization, X-Requested-With,");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
     next();
 };
 server.use(allowCrossDomain);
@@ -71,7 +73,7 @@ const apiNotImplemented = function(req, res, next) {
 };
 
 const errHandler = function(err, req, res, next) {
-    if (err.error.stack) {
+    if (err.error && err.error.stack) {
         logger.error(err.error.stack);
     } else {
         logger.error(err.message);

@@ -9,7 +9,9 @@ const util = require(APP_BASE + '/utils/util');
 const jwt = require('jsonwebtoken');
 
 exports.createToken = (tokenData) => {
-    return jwt.sign(tokenData, config.JWT.PRIVATE_KEY, {expiresIn: config.JWT.TOKEN_EXPIRY});
+    tokenData.exp = Math.floor(Date.now() / 1000) + config.JWT.TOKEN_EXPIRY;
+    return jwt.sign(tokenData, config.JWT.PRIVATE_KEY);
+    // return jwt.sign(tokenData, config.JWT.PRIVATE_KEY, {expiresIn: config.JWT.TOKEN_EXPIRY});
 }
 
 exports.verifyToken = (token, callback) => {
