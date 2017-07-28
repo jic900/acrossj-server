@@ -20,12 +20,13 @@ exports.verifyToken = (token, callback) => {
 
 exports.sendVerifyMail = (user, token, lang, callback) => {
     // TODO - create verify email based on language
-    const verifyLink = "http://" + config.SERVER.DOMAIN_HOST + ":" + config.SERVER.DOMAIN_PORT + "/" + config.EMAIL.VERIFY_EMAIL_URL + "?token=" + token;
+//    const verifyLink = "http://" + config.SERVER.DOMAIN_HOST + ":" + config.SERVER.DOMAIN_PORT + "/" + config.EMAIL.VERIFY_EMAIL_URL + "?token=" + token;
+    const verifyLink = config.EMAIL.CLIENT_BASE_URL + "/" + config.EMAIL.VERIFY_EMAIL_URL + "?token=" + token;
     const from = `ACrossJ Admin<${config.EMAIL.USER}>`;
     const mailbody = `
         <p>Hi ${user.username},</p>
         <br/>
-        <p>Thanks for Registering. Please verify your email by clicking on the verification link below. The link will expire in ${config.JWT.TOKEN_EXPIRY}.</p>
+        <p>Thanks for Registering. Please verify your email by clicking on the verification link below. The link will expire in ${config.JWT.TOKEN_EXPIRY/3600} hours.</p>
         <br/>
         <a href=${verifyLink.toString()}>Verification Link</a>`;
     util.mail(from, user.email, `Account Verification`, mailbody, function(error, success) {
@@ -35,12 +36,13 @@ exports.sendVerifyMail = (user, token, lang, callback) => {
 
 exports.sendResetPasswordMail = (user, token, lang, callback) => {
     // TODO - create resetpassword email based on language
-    const resetPasswordLink = "http://" + config.SERVER.DOMAIN_HOST + ":" + config.SERVER.DOMAIN_PORT + "/" + config.EMAIL.RESET_PASSWORD_URL + "?token=" + token;
+//    const resetPasswordLink = "http://" + config.SERVER.DOMAIN_HOST + ":" + config.SERVER.DOMAIN_PORT + "/" + config.EMAIL.RESET_PASSWORD_URL + "?token=" + token;
+    const resetPasswordLink = config.EMAIL.CLIENT_BASE_URL + "/" + config.EMAIL.RESET_PASSWORD_URL + "?token=" + token;
     const from = `ACrossJ Admin<${config.EMAIL.USER}>`;
     const mailbody = `
         <p>Hi ${user.username},</p>
         <br/>
-        <p>Please reset your password by clicking on the link below. The link will expire in ${config.JWT.TOKEN_EXPIRY}.</p>
+        <p>Please reset your password by clicking on the link below. The link will expire in ${config.JWT.TOKEN_EXPIRY/3600} hours.</p>
         <br/>
         <a href=${resetPasswordLink.toString()}>Reset Password Link</a>`;
     util.mail(from, user.username , `Account Reset Password`, mailbody, function(error, success){

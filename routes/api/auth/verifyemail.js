@@ -13,8 +13,7 @@ const router = require('express').Router();
 const User = require(APP_BASE + '/models/user');
 
 router.route('/').post((req, res, next) => {
-    const token = req.query['token'];
-    authService.verifyToken(token, (err, decoded) => {
+    authService.verifyToken(req.body.token, (err, decoded) => {
         if (err) {
             if (err.name === 'TokenExpiredError') {
                 next(util.getError('TokenExpired', httpStatus.UNAUTHORIZED, err, null));
