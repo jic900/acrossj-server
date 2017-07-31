@@ -72,7 +72,8 @@ User.plugin(uniqueValidator);
 const autoIncrement = require(APP_BASE +'/db/db').autoIncrement;
 User.plugin(autoIncrement.plugin, {
     model: 'user',
-    field: '_id'
+    field: '_id',
+    startAt: 1
 });
 
 User.statics = {
@@ -84,7 +85,7 @@ User.statics = {
     },
     updateUser: function(user, callback) {
         user.password = util.decrypt(user.password);
-        user.update(callback);
+        user.save(callback);
     },
     findUser: function(query, callback) {
         this.findOne(query, callback);
