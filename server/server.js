@@ -19,7 +19,7 @@ const morgan = require('morgan');
 server.use(morgan(config.LOG.ACCESS_LOG_FORMAT, {stream: access_logger.stream}));
 
 // Check db
-const db = require(APP_BASE +'/db/db').db;
+const db = require(APP_BASE + '/db/db').db;
 const httpStatus = require('http-status-codes');
 const dbCheck = function(req, res, next) {
     if (db.readyState !== 1) {
@@ -37,14 +37,18 @@ const dbCheck = function(req, res, next) {
 server.use(dbCheck);
 
 // Fix cross domain issue
-const allowCrossDomain = function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Max-Age", "86400");
-    res.header("Access-Control-Allow-Headers", "Origin, Accept, Content-Type, Authorization, X-Requested-With,");
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
-    next();
-};
-server.use(allowCrossDomain);
+const cors = require('cors');
+const corsOptions = require(APP_BASE + '/server/cors_options');
+server.use(cors(corsOptions));
+
+// const allowCrossDomain = function(req, res, next) {
+//     res.header("Access-Control-Allow-Origin", "*");
+//     res.header("Access-Control-Max-Age", "86400");
+//     res.header("Access-Control-Allow-Headers", "Origin, Accept, Content-Type, Authorization, X-Requested-With,");
+//     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
+//     next();
+// };
+// server.use(allowCrossDomain);
 
 // Set up request body parser
 const body_parser = require('body-parser');

@@ -7,7 +7,12 @@ module.exports = {
         DOMAIN_HOST: '68.149.121.215',
         DOMAIN_PORT: '8080',
         HOST: 'localhost',
-        PORT: 10007
+        PORT: 10007,
+        CORS_WHITELIST: [
+            'http://localhost',
+            'http://127.0.0.1',
+            'http://68.149.121.215'
+        ]
     },
     DB: {
         HOST: 'localhost',
