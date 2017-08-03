@@ -45,7 +45,7 @@ exports.sendResetPasswordMail = (user, token, lang, callback) => {
         <p>Please reset your password by clicking on the link below. The link will expire in ${config.JWT.TOKEN_EXPIRY/3600} hours.</p>
         <br/>
         <a href=${resetPasswordLink.toString()}>Reset Password Link</a>`;
-    util.mail(from, user.username , `Account Reset Password`, mailbody, function(error, success){
+    util.mail(from, user.email , `Account Reset Password`, mailbody, function(error, success){
         callback(error, success);
     });
 };

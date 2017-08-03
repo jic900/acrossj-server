@@ -14,12 +14,14 @@ const router = require('express').Router();
 const User = require(APP_BASE + '/models/user');
 
 router.route('/').post((req, res, next) => {
+
     async.waterfall([
         function (callback) {
-            const userData = {
-                username: req.body.username,
-                email: req.body.email
-            }
+            // const userData = {
+            //     username: req.body.username,
+            //     email: req.body.email
+            // }
+            const userData = req.body.email.indexOf('@') === -1 ? {username: req.body.email} : {email: req.body.email};
             User.findUser(userData, (err, user) => {
                 if (!err) {
                     if (user === null) {
@@ -38,9 +40,10 @@ router.route('/').post((req, res, next) => {
                 username: user.username,
             };
             const token = authService.createToken(tokenData);
+            logger.debug(JSON.stringify(user));
             authService.sendResetPasswordMail(user, token, req.body.lang, (err, result) => {
                 if (!err) {
-                    callback(null, {status: 'Reset password email successfully sent'});
+                    callback(null, {status: httpStatus.OK});
                 } else {
                     callback(util.getError('SendResetPasswordMail', httpStatus.FORBIDDEN, err, null), null);
                 }

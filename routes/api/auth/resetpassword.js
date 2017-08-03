@@ -13,8 +13,7 @@ const router = require('express').Router();
 const User = require(APP_BASE + '/models/user');
 
 router.route('/').post((req, res, next) => {
-    const token = req.query['token'];
-    authService.verifyToken(token, (err, decoded) => {
+    authService.verifyToken(req.body.token, (err, decoded) => {
         if (err) {
             if (err.name === 'TokenExpiredError') {
                 next(util.getError('TokenExpired', httpStatus.UNAUTHORIZED, err, null));
@@ -30,16 +29,13 @@ router.route('/').post((req, res, next) => {
                 } else if (user === null) {
                     err = {message: 'User not found'};
                     next(util.getError('UserNotFound', httpStatus.UNPROCESSABLE_ENTITY, err, null));
-                } else if (req.body.newPassword !== req.body.confirmNewPassword) {
-                    err = {message: 'The new password does not match the confirm password'};
-                    next(util.getError('PasswordMisMatch', httpStatus.UNPROCESSABLE_ENTITY, err, null));
                 } else {
-                    user.password = req.body.newPassword;
-                    User.updateUser(user, (err, user) => {
+                    user.password = req.body.password;
+                    User.updatePassword(user, (err, user) => {
                         if (!err) {
                             res.json({message: `Password changed successfully`});
                         } else {
-                            next(util.getError('UpdateUser', httpStatus.INTERNAL_SERVER_ERROR, err, null));
+                            next(util.getError('UpdatePassword', httpStatus.INTERNAL_SERVER_ERROR, err, null));
                         }
                     })
                 }

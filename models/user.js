@@ -87,6 +87,9 @@ User.statics = {
         user.password = util.decrypt(user.password);
         user.save(callback);
     },
+    updatePassword: function(user, callback) {
+        user.save(callback);
+    },
     findUser: function(query, callback) {
         this.findOne(query, callback);
     },
