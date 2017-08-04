@@ -16,7 +16,8 @@ const User = require(APP_BASE + '/models/user');
 router.route('/').post((req, res, next) => {
     async.waterfall([
         function (callback) {
-            User.findUser({username: req.body.username}, (err, user) => {
+            const userData = req.body.email.indexOf('@') === -1 ? {username: req.body.email} : {email: req.body.email};
+            User.findUser(userData, (err, user) => {
                 if (!err) {
                     if (user === null) {
                         err = {message: 'User Not Found'};
@@ -38,7 +39,7 @@ router.route('/').post((req, res, next) => {
                 if (err) {
                     callback(util.getError('SendVerifyMail', httpStatus.FORBIDDEN, err, null), null);
                 } else {
-                    callback(null, {status: 'Verify email successfully sent'});
+                    callback(null, {status: httpStatus.OK});
                 }
             });
         },
