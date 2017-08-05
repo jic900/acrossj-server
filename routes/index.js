@@ -10,6 +10,12 @@ router.get('/', function(req, res, next) {
     res.send('Welcome to ACrossJ');
 });
 
+// initialize request params for this application
+router.use((req, res, next) => {
+    req.ACROSSJ_PARAMS = {};
+    next();
+});
+
 const fs = require('fs');
 fs.readdirSync(APP_BASE + '/routes/api').forEach(function(name){
     const entity = name.indexOf('.') !== -1 ? name.substring(0, name.indexOf('.')) : name;
@@ -18,3 +24,8 @@ fs.readdirSync(APP_BASE + '/routes/api').forEach(function(name){
 });
 
 module.exports = router;
+
+
+// app.get('/something', [express.bodyParser(), jwtauth], function(req, res){
+//     // do something
+// });

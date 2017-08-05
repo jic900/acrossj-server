@@ -14,9 +14,9 @@ const server = express();
 
 // Set up loggers
 const logger = require(APP_BASE + '/utils/logger')(module.filename);
-const access_logger = require(APP_BASE + '/utils/access_logger');
+const accessLogger = require(APP_BASE + '/utils/access-logger');
 const morgan = require('morgan');
-server.use(morgan(config.LOG.ACCESS_LOG_FORMAT, {stream: access_logger.stream}));
+server.use(morgan(config.LOG.ACCESS_LOG_FORMAT, {stream: accessLogger.stream}));
 
 // Check db
 const db = require(APP_BASE + '/db/db').db;
@@ -41,15 +41,6 @@ const cors = require('cors');
 const corsOptions = require(APP_BASE + '/server/cors_options');
 server.use(cors(corsOptions));
 
-// const allowCrossDomain = function(req, res, next) {
-//     res.header("Access-Control-Allow-Origin", "*");
-//     res.header("Access-Control-Max-Age", "86400");
-//     res.header("Access-Control-Allow-Headers", "Origin, Accept, Content-Type, Authorization, X-Requested-With,");
-//     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
-//     next();
-// };
-// server.use(allowCrossDomain);
-
 // Set up request body parser
 const body_parser = require('body-parser');
 server.use(body_parser.urlencoded({extended: true}));
@@ -59,12 +50,12 @@ server.use(body_parser.json());
 const favicon = require('serve-favicon');
 server.use(favicon(APP_BASE + '/static/images/favicon.ico'));
 
-// Define routes
-server.use(require(APP_BASE + "/routes"));
-
 // Define static resources
 const path = require("path");
 server.use(express.static(path.join(APP_BASE, 'static')));
+
+// Define routes
+server.use(require(APP_BASE + "/routes"));
 
 const apiNotImplemented = function(req, res, next) {
     const error = {
@@ -100,7 +91,7 @@ const http_server = server.listen(server.get('port'), function() {
     process.send('ready');
 });
 
-const gracefulShutdown = require('./server_shutdown');
+const gracefulShutdown = require('./server-shutdown');
 gracefulShutdown(http_server);
 
 const serverShutdown = function() {

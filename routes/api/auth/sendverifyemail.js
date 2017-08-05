@@ -4,53 +4,27 @@
 
 const APP_BASE = process.env.NODE_PATH;
 const logger = require(APP_BASE + '/utils/logger')(module.filename);
-const config = require(APP_BASE + '/config');
 const util = require(APP_BASE + '/utils/util');
-const errors = require(APP_BASE + '/resources/errors');
-const async = require('async');
+const authUtil = require(APP_BASE + '/utils/auth-util');
 const httpStatus = require('http-status-codes');
-const authService = require(APP_BASE + '/routes/api/auth/auth.service');
 const router = require('express').Router();
-const User = require(APP_BASE + '/models/user');
+const findUserBy = require(APP_BASE + '/middlewares/find-user-by');
 
-router.route('/').post((req, res, next) => {
-    async.waterfall([
-        function (callback) {
-            const userData = req.body.email.indexOf('@') === -1 ? {username: req.body.email} : {email: req.body.email};
-            User.findUser(userData, (err, user) => {
-                if (!err) {
-                    if (user === null) {
-                        err = {message: 'User Not Found'};
-                        callback(util.getError('UserNotFound', httpStatus.UNPROCESSABLE_ENTITY, err, null), null);
-                    } else {
-                        callback(null, user);
-                    }
-                } else {
-                    callback(util.getError('FindUser', httpStatus.INTERNAL_SERVER_ERROR, err, null), null);
-                }
-            })
-        },
-        function (user, callback) {
-            const tokenData = {
-                username: user.username
-            };
-            const token = authService.createToken(tokenData);
-            authService.sendVerifyMail(user, token, req.body.lang, (err, result) => {
-                if (err) {
-                    callback(util.getError('SendVerifyMail', httpStatus.FORBIDDEN, err, null), null);
-                } else {
-                    callback(null, {status: httpStatus.OK});
-                }
-            });
-        },
-    ],
-    function (err, result) {
+const sendVerifyEmail = (req, res, next) => {
+    const user = req.ACROSSJ_PARAMS.user;
+    const tokenData = {
+        username: user.username
+    };
+    const token = authUtil.createToken(tokenData);
+    authUtil.sendVerifyMail(user, token, req.body.lang, (err, result) => {
         if (err) {
-            next(err);
+            next(util.getError('SendVerifyMail', httpStatus.FORBIDDEN, err, null), null);
         } else {
-            res.json(result);
+            res.json({status: httpStatus.OK});
         }
     });
-});
+}
+
+router.route('/').post(findUserBy('username'), sendVerifyEmail);
 
 module.exports = router;
