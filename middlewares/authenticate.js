@@ -18,7 +18,7 @@ module.exports = (req, res, next) => {
             const err = {message: 'Authorization header format: Bearer [token]'};
             next(util.getError('InvalidAuthHeader', httpStatus.UNPROCESSABLE_ENTITY, err, null));
         } else {
-            authUtil.verifyToken(authParts[1], next, decodedToken => {
+            authUtil.verifyToken(authParts[1], true, next, decodedToken => {
                 if (req.body) {
                     req.body['username'] = decodedToken.username;
                 } else {

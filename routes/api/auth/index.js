@@ -12,5 +12,6 @@ router.use('/verifyemail', require(APP_BASE + '/routes/api/auth/verifyemail'));
 router.use('/forgotpassword', require(APP_BASE + '/routes/api/auth/forgotpassword'));
 router.use('/resetpassword', require(APP_BASE + '/routes/api/auth/resetpassword'));
 router.use('/sendverifyemail', require(APP_BASE + '/routes/api/auth/sendverifyemail'));
+router.use('/refreshtoken', require(APP_BASE + '/routes/api/auth/refreshtoken'));
 
 module.exports = router;

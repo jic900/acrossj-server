@@ -15,13 +15,15 @@ exports.createToken = (tokenData) => {
     // return jwt.sign(tokenData, config.JWT.PRIVATE_KEY, {expiresIn: config.JWT.TOKEN_EXPIRY});
 }
 
-exports.verifyToken = (token, next, callback) => {
+exports.verifyToken = (token, isAuthToken, next, callback) => {
     jwt.verify(token, config.JWT.PRIVATE_KEY, (err, decodedToken) => {
         if (err) {
             if (err.name === 'TokenExpiredError') {
-                next(util.getError('TokenExpired', httpStatus.UNAUTHORIZED, err, null));
+                const errorName = isAuthToken ? 'TokenExpired' : 'EmailLinkExpired';
+                next(util.getError(errorName, httpStatus.UNAUTHORIZED, err, null));
             } else if (err.name === 'JsonWebTokenError') {
-                next(util.getError('InvalidToken', httpStatus.UNAUTHORIZED, err, null));
+                const errorName = isAuthToken ? 'InvalidToken' : 'InvalidEmailLink';
+                next(util.getError(errorName, httpStatus.UNAUTHORIZED, err, null));
             } else {
                 next(util.getError('VerifyToken', httpStatus.INTERNAL_SERVER_ERROR, err, null));
             }
