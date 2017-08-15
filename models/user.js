@@ -38,8 +38,6 @@ const User = new Schema({
         type: String,
         required: [true, errors.get('validation.user.password.required')]
     },
-    // address: String,
-    // phone: String,
     role: {
         type: String,
         enum: {

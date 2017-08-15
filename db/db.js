@@ -10,13 +10,9 @@ const logger = require(APP_BASE + '/utils/logger')(module.filename);
 const mongoose = require('mongoose');
 
 const connectOptions = {
-    server:{
-        socketOptions:{
-//            connectTimeoutMS: 15000,
-//            socketTimeoutMS: 15000,
-            keepAlive: 1
-        }
-    }
+    useMongoClient: true,
+    keepAlive: true,
+    reconnectTries: 3
 }
 
 mongoose.connect(config.DB.URL, connectOptions);
@@ -39,12 +35,6 @@ connection.on('disconnected', function () {
     logger.info('Mongoose connection disconnected');
 });
 
-// const fs = require('fs');
-// fs.readdirSync(APP_BASE + '/models').forEach(function(name){
-//     var model = name.substring(0, name.indexOf('.'));
-//     require(APP_BASE + '/models/' + model);
-// });
-
 const uniqueValidator = require('mongoose-unique-validator');
 const autoIncrement = require('mongoose-auto-increment');
 autoIncrement.initialize(connection);
@@ -52,10 +42,3 @@ autoIncrement.initialize(connection);
 exports.db = connection;
 exports.uniqueValidator = uniqueValidator;
 exports.autoIncrement = autoIncrement;
-
-
-// module.exports = mongoose;
-//
-// module.exports.close = function() {
-//     mongoose.connection.close(function() {});
-// }
