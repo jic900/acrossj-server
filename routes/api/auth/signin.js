@@ -21,6 +21,7 @@ const validatePassword = (req, res, next) => {
     } else {
         const tokenData = {
             userId: user._id,
+            userName: user.username,
             role: user.role
         };
         res.json({token: authUtil.createToken(tokenData)});
