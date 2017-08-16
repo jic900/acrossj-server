@@ -20,9 +20,9 @@ module.exports = (req, res, next) => {
         } else {
             authUtil.verifyToken(authParts[1], true, next, decodedToken => {
                 if (req.body) {
-                    req.body['username'] = decodedToken.username;
+                    req.body['userId'] = decodedToken.userId;
                 } else {
-                    req.ACROSSJ_PARAMS.token = decodedToken;
+                    req.ACROSSJ_PARAMS.userId = decodedToken.userId;
                 }
                 next();
             })

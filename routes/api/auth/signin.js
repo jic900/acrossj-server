@@ -20,7 +20,7 @@ const validatePassword = (req, res, next) => {
         next(util.getError('NotVerified', httpStatus.UNAUTHORIZED, err, null));
     } else {
         const tokenData = {
-            username: user.username,
+            userId: user._id,
             role: user.role
         };
         res.json({token: authUtil.createToken(tokenData)});
