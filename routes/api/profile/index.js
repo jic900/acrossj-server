@@ -8,5 +8,6 @@ const router = require('express').Router();
 const authenticate = require(APP_BASE + '/middlewares/authenticate');
 
 router.use('/changepassword', authenticate, require(APP_BASE + '/routes/api/profile/changepassword'));
+router.use('/userprofile', authenticate, require(APP_BASE + '/routes/api/profile/userprofile'));
 
 module.exports = router;
