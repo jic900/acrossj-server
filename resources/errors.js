@@ -7,11 +7,11 @@ const logger = require(APP_BASE + '/utils/logger')(module.filename);
 const errors = require('properties-reader')(APP_BASE + '/resources/errors.properties');
 
 exports.get = (key, valueArgs) => {
-    let value = errors.get(key);
-    if (valueArgs && valueArgs instanceof Array) {
-        for (let index in valueArgs) {
-            value = value.replace(`{${index}}`, valueArgs[index]);
-        }
+  let value = errors.get(key);
+  if (valueArgs && valueArgs instanceof Array) {
+    for (let index in valueArgs) {
+      value = value.replace(`{${index}}`, valueArgs[index]);
     }
-    return value;
+  }
+  return value;
 }

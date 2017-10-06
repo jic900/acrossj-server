@@ -9,22 +9,22 @@ const authUtil = require(APP_BASE + '/utils/auth-util');
 const httpStatus = require('http-status-codes');
 
 module.exports = (req, res, next) => {
-    if (req.headers.authorization) {
+  if (req.headers.authorization) {
 
-        const pattern = new RegExp(/^Bearer$/i);
-        const authParts = req.headers.authorization.split(' ');
+    const pattern = new RegExp(/^Bearer$/i);
+    const authParts = req.headers.authorization.split(' ');
 
-        if (authParts.length !== 2 || ! pattern.test(authParts[0])) {
-            const err = {message: 'Authorization header format: Bearer [token]'};
-            next(util.getError('InvalidAuthHeader', httpStatus.UNPROCESSABLE_ENTITY, err, null));
-        } else {
-            authUtil.verifyToken(authParts[1], true, next, decodedToken => {
-                req.ACROSSJ_PARAMS.userId = decodedToken.userId;
-                next();
-            })
-        }
+    if (authParts.length !== 2 || !pattern.test(authParts[0])) {
+      const err = {message: 'Authorization header format: Bearer [token]'};
+      next(util.getError('InvalidAuthHeader', httpStatus.UNPROCESSABLE_ENTITY, err, null));
     } else {
-        const err = {message: 'No Authorization header found'};
-        next(util.getError('AuthHeaderNotFound', httpStatus.UNPROCESSABLE_ENTITY, err, null));
+      authUtil.verifyToken(authParts[1], true, next, decodedToken => {
+        req.ACROSSJ_PARAMS.userId = decodedToken.userId;
+        next();
+      })
     }
+  } else {
+    const err = {message: 'No Authorization header found'};
+    next(util.getError('AuthHeaderNotFound', httpStatus.UNPROCESSABLE_ENTITY, err, null));
+  }
 };

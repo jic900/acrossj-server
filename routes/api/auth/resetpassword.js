@@ -12,15 +12,15 @@ const verifyToken = require(APP_BASE + '/middlewares/verify-token');
 const findUserBy = require(APP_BASE + '/middlewares/find-user-by');
 
 const resetPassword = (req, res, next) => {
-    const user = req.ACROSSJ_PARAMS.user;
-    user.password = req.body.newPassword;
-    User.updatePassword(user, (err, user) => {
-        if (err) {
-            next(util.getError('UpdatePassword', httpStatus.INTERNAL_SERVER_ERROR, err, null));
-        } else {
-            res.json({status: httpStatus.OK});
-        }
-    })
+  const user = req.ACROSSJ_PARAMS.user;
+  user.password = req.body.newPassword;
+  User.updatePassword(user, (err, user) => {
+    if (err) {
+      next(util.getError('UpdatePassword', httpStatus.INTERNAL_SERVER_ERROR, err, null));
+    } else {
+      res.json({status: httpStatus.OK});
+    }
+  })
 }
 
 router.route('/').post(verifyToken, findUserBy('username'), resetPassword);

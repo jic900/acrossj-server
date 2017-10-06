@@ -17,89 +17,89 @@ exports = module.exports = gracefulShutdown;
  * @param {http.Server} server The server to add shutdown functionality to
  */
 function gracefulShutdown(server) {
-    let connections = {};
-    let isShuttingDown = false;
-    let connectionCounter = 0;
+  let connections = {};
+  let isShuttingDown = false;
+  let connectionCounter = 0;
 
-    function destroy(socket, force) {
-        if (force || (socket._isIdle && isShuttingDown)) {
-            socket.destroy();
-            delete connections[socket._connectionId];
-        }
-    };
+  function destroy(socket, force) {
+    if (force || (socket._isIdle && isShuttingDown)) {
+      socket.destroy();
+      delete connections[socket._connectionId];
+    }
+  };
 
-    function onConnection(socket) {
-        const id = connectionCounter++;
-        socket._isIdle = true;
-        socket._connectionId = id;
-        connections[id] = socket;
+  function onConnection(socket) {
+    const id = connectionCounter++;
+    socket._isIdle = true;
+    socket._connectionId = id;
+    connections[id] = socket;
 
-        socket.on('close', function() {
-            delete connections[id];
-        });
-        socket.on('error', function() {
-            delete connections[id];
-        });
-    };
-
-    server.on('request', function(req, res) {
-        req.socket._isIdle = false;
-
-        res.on('finish', function() {
-            req.socket._isIdle = true;
-            destroy(req.socket);
-        });
+    socket.on('close', function () {
+      delete connections[id];
     });
+    socket.on('error', function () {
+      delete connections[id];
+    });
+  };
 
-    server.on('connection', onConnection);
+  server.on('request', function (req, res) {
+    req.socket._isIdle = false;
+
+    res.on('finish', function () {
+      req.socket._isIdle = true;
+      destroy(req.socket);
+    });
+  });
+
+  server.on('connection', onConnection);
 //    server.on('secureConnection', onConnection);
 
-    // server.on('error', function(err, callback) {
-    //     logger.error('HTTP server error occurred: ' + err.stack);
-    //     if (callback) {
-    //         process.nextTick(function() {
-    //             callback(err);
-    //         });
-    //     }
-    // });
+  // server.on('error', function(err, callback) {
+  //     logger.error('HTTP server error occurred: ' + err.stack);
+  //     if (callback) {
+  //         process.nextTick(function() {
+  //             callback(err);
+  //         });
+  //     }
+  // });
 
-    function shutdown(force, callback) {
-        logger.debug('HTTP server stopping');
-        isShuttingDown = true;
+  function shutdown(force, callback) {
+    logger.debug('HTTP server stopping');
+    isShuttingDown = true;
 
-        server.close(function(err) {
-            if (callback) {
-                process.nextTick(function() {
-                    callback(err);
-                });
-            }
+    server.close(function (err) {
+      if (callback) {
+        process.nextTick(function () {
+          callback(err);
         });
-        Object.keys(connections).forEach(function(key) {
-            destroy(connections[key], force);
-        });
-    };
+      }
+    });
+    Object.keys(connections).forEach(function (key) {
+      destroy(connections[key], force);
+    });
+  };
 
-    server.shutdown = function(callback) {
-        shutdown(false, callback);
-    };
+  server.shutdown = function (callback) {
+    shutdown(false, callback);
+  };
 
-    server.forceShutdown = function(callback) {
-        shutdown(true, callback);
-    };
+  server.forceShutdown = function (callback) {
+    shutdown(true, callback);
+  };
 
-    return server;
+  return server;
 };
 
 /**
  * Extends the {http.Server} object with shutdown functionality.
  * @return {http.Server} The decorated server object
  */
-exports.extend = function() {
-    http.Server.prototype.withShutdown = function() {
-        return gracefulShutdown(this);
-    };
+exports.extend = function () {
+  http.Server.prototype.withShutdown = function () {
+    return gracefulShutdown(this);
+  };
 
-    // https.Server.prototype.withShutdown = function() {
-    //     return gracefulShutdown(this);
-    // };
+  // https.Server.prototype.withShutdown = function() {
+  //     return gracefulShutdown(this);
+  // };
 };

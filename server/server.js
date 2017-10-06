@@ -21,18 +21,18 @@ server.use(morgan(config.LOG.ACCESS_LOG_FORMAT, {stream: accessLogger.stream}));
 // Check db
 const db = require(APP_BASE + '/db/db').db;
 const httpStatus = require('http-status-codes');
-const dbCheck = function(req, res, next) {
-    if (db.readyState !== 1) {
-        const error = {
-            status: httpStatus.SERVICE_UNAVAILABLE,
-            name: 'DBUnavailable',
-            message: errors.get('common.db.unavailable'),
-            error: {}
-        };
-        next(error);
-    } else {
-        next();
-    }
+const dbCheck = function (req, res, next) {
+  if (db.readyState !== 1) {
+    const error = {
+      status: httpStatus.SERVICE_UNAVAILABLE,
+      name: 'DBUnavailable',
+      message: errors.get('common.db.unavailable'),
+      error: {}
+    };
+    next(error);
+  } else {
+    next();
+  }
 };
 server.use(dbCheck);
 
@@ -57,28 +57,28 @@ server.use(express.static(path.join(APP_BASE, 'static')));
 // Define routes
 server.use(require(APP_BASE + "/routes"));
 
-const apiNotImplemented = function(req, res, next) {
-    const error = {
-        status: httpStatus.NOT_IMPLEMENTED,
-        name: 'APINotImplemented',
-        message: errors.get('common.api.not.implemented', [req.method, req.url]),
-        error: {}
-    }
-    next(error);
+const apiNotImplemented = function (req, res, next) {
+  const error = {
+    status: httpStatus.NOT_IMPLEMENTED,
+    name: 'APINotImplemented',
+    message: errors.get('common.api.not.implemented', [req.method, req.url]),
+    error: {}
+  }
+  next(error);
 };
 
-const errHandler = function(err, req, res, next) {
-    if (err.error && err.error.stack) {
-        logger.error(err.error.stack);
-    } else {
-        logger.error(err.message);
-    }
-    res.status(err.status || httpStatus.INTERNAL_SERVER_ERROR);
-    const nodeEnv = process.env.NODE_ENV || config.NODE_ENV;
-    if (nodeEnv === 'production') {
-        err.error = {};
-    }
-    res.json(err);
+const errHandler = function (err, req, res, next) {
+  if (err.error && err.error.stack) {
+    logger.error(err.error.stack);
+  } else {
+    logger.error(err.message);
+  }
+  res.status(err.status || httpStatus.INTERNAL_SERVER_ERROR);
+  const nodeEnv = process.env.NODE_ENV || config.NODE_ENV;
+  if (nodeEnv === 'production') {
+    err.error = {};
+  }
+  res.json(err);
 };
 server.use(apiNotImplemented);
 server.use(errHandler);
@@ -86,31 +86,32 @@ server.use(errHandler);
 //process.send = process.send || function() {};
 
 server.set('port', config.SERVER.PORT || 10007);
-const http_server = server.listen(server.get('port'), function() {
-    logger.debug('ACrossJ server listening on port ' + http_server.address().port);
-    process.send('ready');
+const http_server = server.listen(server.get('port'), function () {
+  logger.debug('ACrossJ server listening on port ' + http_server.address().port);
+  process.send('ready');
 });
 
 const gracefulShutdown = require('./server-shutdown');
 gracefulShutdown(http_server);
 
-const serverShutdown = function() {
-    db.close(function() {});
-    logger.debug('ACrossJ server instance shutting down');
-    http_server.shutdown();
-    const exitTimer = setTimeout(function(err) {
-        process.exit(err ? 1 : 0);
-    }, 5000);
-    exitTimer.unref();
+const serverShutdown = function () {
+  db.close(function () {
+  });
+  logger.debug('ACrossJ server instance shutting down');
+  http_server.shutdown();
+  const exitTimer = setTimeout(function (err) {
+    process.exit(err ? 1 : 0);
+  }, 5000);
+  exitTimer.unref();
 };
 
 // Gracefully shut down server when the Node process ends
-process.on('SIGINT', function() {
-    serverShutdown();
+process.on('SIGINT', function () {
+  serverShutdown();
 });
 
-process.on('message', function(msg) {
-    if (msg == 'shutdown') {
-        serverShutdown();
-    }
+process.on('message', function (msg) {
+  if (msg == 'shutdown') {
+    serverShutdown();
+  }
 });

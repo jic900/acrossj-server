@@ -12,19 +12,19 @@ const verifyToken = require(APP_BASE + '/middlewares/verify-token');
 const findUserBy = require(APP_BASE + '/middlewares/find-user-by');
 
 const verifyUser = (req, res, next) => {
-    const user = req.ACROSSJ_PARAMS.user;
-    if (user.isVerified === true) {
-        res.json({status: 'AlreadyVerified', message: 'Account already verified'});
-    } else {
-        user.isVerified = true;
-        User.updateUser(user, (err, user) => {
-            if (err) {
-                next(util.getError('UpdateUser', httpStatus.INTERNAL_SERVER_ERROR, err, null));
-            } else {
-                res.json({status: 'Verified', message: 'Account successfully verified'});
-            }
-        });
-    }
+  const user = req.ACROSSJ_PARAMS.user;
+  if (user.isVerified === true) {
+    res.json({status: 'AlreadyVerified', message: 'Account already verified'});
+  } else {
+    user.isVerified = true;
+    User.updateUser(user, (err, user) => {
+      if (err) {
+        next(util.getError('UpdateUser', httpStatus.INTERNAL_SERVER_ERROR, err, null));
+      } else {
+        res.json({status: 'Verified', message: 'Account successfully verified'});
+      }
+    });
+  }
 };
 
 router.route('/').post(verifyToken, findUserBy('username'), verifyUser);

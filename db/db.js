@@ -10,9 +10,9 @@ const logger = require(APP_BASE + '/utils/logger')(module.filename);
 const mongoose = require('mongoose');
 
 const connectOptions = {
-    useMongoClient: true,
-    keepAlive: true,
-    reconnectTries: 3
+  useMongoClient: true,
+  keepAlive: true,
+  reconnectTries: 3
 }
 
 mongoose.connect(config.DB.URL, connectOptions);
@@ -20,19 +20,19 @@ mongoose.connect(config.DB.URL, connectOptions);
 const connection = mongoose.connection;
 
 connection.on('connecting', function () {
-    logger.info('Mongoose connecting to ' + config.DB.URL);
+  logger.info('Mongoose connecting to ' + config.DB.URL);
 });
 
 connection.on('connected', function () {
-    logger.info('Mongoose connection open to ' + config.DB.URL);
+  logger.info('Mongoose connection open to ' + config.DB.URL);
 });
 
-connection.on('error',function (err) {
-    logger.error('Mongoose connection error: ' + err);
+connection.on('error', function (err) {
+  logger.error('Mongoose connection error: ' + err);
 });
 
 connection.on('disconnected', function () {
-    logger.info('Mongoose connection disconnected');
+  logger.info('Mongoose connection disconnected');
 });
 
 const uniqueValidator = require('mongoose-unique-validator');

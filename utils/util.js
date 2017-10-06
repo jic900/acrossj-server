@@ -12,75 +12,75 @@ const algorithm = 'aes-256-ctr';
 const privateKey = config.JWT.PRIVATE_KEY;
 
 const smtpTransport = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        type: 'OAuth2',
-        user: config.EMAIL.USER,
-        clientId: config.EMAIL.CLIENT_ID,
-        clientSecret: config.EMAIL.CLIENT_SECRET,
-        refreshToken: config.EMAIL.REFRESH_TOKEN
-    }
+  service: 'gmail',
+  auth: {
+    type: 'OAuth2',
+    user: config.EMAIL.USER,
+    clientId: config.EMAIL.CLIENT_ID,
+    clientSecret: config.EMAIL.CLIENT_SECRET,
+    refreshToken: config.EMAIL.REFRESH_TOKEN
+  }
 });
 
 exports.mail = (from, email, subject, mailbody, callback) => {
-    const mailOptions = {
-        from: from,
-        to: email, // list of receivers
-        subject: subject,
-        html: mailbody
-    };
-    smtpTransport.sendMail(mailOptions, function(error, response) {
-        if (error) {
-            callback(error, null);
-        } else{
-            callback(null, response);
-        }
-        smtpTransport.close();
-    });
+  const mailOptions = {
+    from: from,
+    to: email, // list of receivers
+    subject: subject,
+    html: mailbody
+  };
+  smtpTransport.sendMail(mailOptions, function (error, response) {
+    if (error) {
+      callback(error, null);
+    } else {
+      callback(null, response);
+    }
+    smtpTransport.close();
+  });
 }
 
 exports.decrypt = (value) => {
-    const decipher = crypto.createDecipher(algorithm, privateKey);
-    let dec = decipher.update(value, 'hex', 'utf8');
-    dec += decipher.final('utf8');
-    return dec;
+  const decipher = crypto.createDecipher(algorithm, privateKey);
+  let dec = decipher.update(value, 'hex', 'utf8');
+  dec += decipher.final('utf8');
+  return dec;
 };
 
 exports.encrypt = (value) => {
-    const cipher = crypto.createCipher(algorithm, privateKey);
-    let crypted = cipher.update(value.toString(), 'utf8', 'hex');
-    crypted += cipher.final('hex');
-    return crypted;
+  const cipher = crypto.createCipher(algorithm, privateKey);
+  let crypted = cipher.update(value.toString(), 'utf8', 'hex');
+  crypted += cipher.final('hex');
+  return crypted;
 };
 
 exports.getError = (name, statusCode, err, schema) => {
-    if (err.name === 'ValidationError') {
-        resetValidationError(err, schema);
-    }
-    return {
-        status: statusCode,
-        name: name,
-        message: getErrorMessage(err),
-        error: err
-    };
+  if (err.name === 'ValidationError') {
+    resetValidationError(err, schema);
+  }
+  return {
+    status: statusCode,
+    name: name,
+    message: getErrorMessage(err),
+    error: err
+  };
 }
 
 function resetValidationError(err, schema) {
-    if (err.name === 'ValidationError' && err.errors) {
-        const field = Object.keys(err.errors)[0];
-        const error = err.errors[field];
-        if (error.kind === 'unique') {
-            const errorKey = `validation.${schema}.${field}.unique`;
-            error.message = errors.get(errorKey);
-        }
+  if (err.name === 'ValidationError' && err.errors) {
+    const field = Object.keys(err.errors)[0];
+    const error = err.errors[field];
+    if (error.kind === 'unique') {
+      const errorKey = `validation.${schema}.${field}.unique`;
+      error.message = errors.get(errorKey);
     }
+  }
 }
 
 function getErrorMessage(err) {
-    if (err.name === 'ValidationError' && err.errors) {
-        const field = Object.keys(err.errors)[0];
-        const error = err.errors[field];
-        return error.message;
-    }
-    return err.message;
+  if (err.name === 'ValidationError' && err.errors) {
+    const field = Object.keys(err.errors)[0];
+    const error = err.errors[field];
+    return error.message;
+  }
+  return err.message;
 }

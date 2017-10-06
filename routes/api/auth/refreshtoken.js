@@ -11,10 +11,10 @@ const router = require('express').Router();
 const User = require(APP_BASE + '/models/user');
 
 router.route('/').post((req, res, next) => {
-    const tokenData = {
-        username: req.body.username
-    };
-    res.json({token: authUtil.createToken(tokenData)});
+  const tokenData = {
+    username: req.body.username
+  };
+  res.json({token: authUtil.createToken(tokenData)});
 });
 
 module.exports = router;
