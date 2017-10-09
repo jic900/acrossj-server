@@ -20,7 +20,7 @@ const saveUserProfile = (req, res, next) => {
 }
 
 const getUserProfile = (req, res, next) => {
-  const userId = req.ACROSSJ_PARAMS.userId;
+  const userId = req.ACROSSJ_PARAMS._id;
   Profile.findProfileByUserId(userId, (err, profile) => {
     if (err) {
       next(util.getError('getUserProfile', httpStatus.INTERNAL_SERVER_ERROR, err, null));

@@ -31,6 +31,6 @@ const changePassword = (req, res, next) => {
   }
 }
 
-router.route('/').post(findUserBy('username'), changePassword);
+router.route('/').post(findUserBy('_id'), changePassword);
 
 module.exports = router;

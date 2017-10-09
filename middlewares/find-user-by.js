@@ -11,10 +11,10 @@ const User = require(APP_BASE + '/models/user');
 module.exports = (byProp) => {
   return (req, res, next) => {
     let userData = {};
-    if (byProp === 'username' && req.body.username.indexOf('@') !== -1) {
+    if (byProp === 'username' && req.body.username && req.body.username.indexOf('@') !== -1) {
       userData['email'] = req.body.username;
     } else {
-      userData[byProp] = req.body[byProp];
+      userData[byProp] = req.body[byProp] || req.ACROSSJ_PARAMS[byProp];
     }
     User.findUser(userData, (err, user) => {
       if (err) {

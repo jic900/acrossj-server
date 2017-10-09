@@ -20,7 +20,6 @@ const Personal = new Schema({
   address: String,
   postcode: String,
   phonenumber: String
-
 }, {_id: false});
 
 const GeneralInfo = new Schema({
@@ -85,7 +84,7 @@ Profile.statics = {
     this.create(requestData, callback);
   },
   updateProfile: function (request, callback) {
-    this.findOneAndUpdate({'_userid': request.ACROSSJ_PARAMS.userId}, {'$set': request.body}, {'new': true}, callback);
+    this.findOneAndUpdate({'_userid': request.ACROSSJ_PARAMS._id}, {'$set': request.body}, {'new': true}, callback);
   },
   findProfile: function (query, callback) {
     this.findOne(query, callback);
