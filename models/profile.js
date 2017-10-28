@@ -2,7 +2,6 @@
  * Created by E86643 on 8/12/2017.
  */
 
-
 const APP_BASE = process.env.NODE_PATH;
 const config = require(APP_BASE + '/config');
 const logger = require(APP_BASE + '/utils/logger')(module.filename);
@@ -13,67 +12,22 @@ logger.debug('Initializing model.profile');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const Personal = new Schema({
-  fullname: String,
-  gender: String,
-  birthday: Date,
-  address: String,
-  postcode: String,
-  phonenumber: String
-}, {_id: false});
-
-const GeneralInfo = new Schema({
-  languages: [],
-  manage_skill: String,
-  shoe_size: Number,
-  T_Shirt_size: String,
-  height: Number,
-  weight: Number
-}, {_id: false});
-
-const SkiInfo = new Schema({
-  level: Number,
-  type: String,
-  license: String,
-  jacket_size: Number,
-  pants_size: Number
-}, {_id: false});
-
-const HikingInfo = new Schema({
-  info: [Schema.Types.Mixed]
-}, {_id: false});
-
-const RunningInfo = new Schema({
-  info: [Schema.Types.Mixed]
-}, {_id: false});
-
-const BicyclingInfo = new Schema({
-  info: [Schema.Types.Mixed]
-}, {_id: false});
-
-const CampingInfo = new Schema({
-  info: [Schema.Types.Mixed]
-}, {_id: false});
-
-const OthersInfo = new Schema({
-  info: [Schema.Types.Mixed]
-}, {_id: false});
-
 const Relevant = new Schema({
-  general: GeneralInfo,
-  ski: SkiInfo,
-  hiking: HikingInfo,
-  running: RunningInfo,
-  bicycling: BicyclingInfo,
-  camping: CampingInfo,
-  others: OthersInfo
+  general: Schema.Types.Mixed,
+  ski: Schema.Types.Mixed,
+  hiking: Schema.Types.Mixed,
+  running: Schema.Types.Mixed,
+  bicycling: Schema.Types.Mixed,
+  camping: Schema.Types.Mixed,
+  others: Schema.Types.Mixed
 }, {_id: false});
 
 const Profile = new Schema({
   _userid: {type: Number, unique: true},
-  personal: Personal,
+  personal: Schema.Types.Mixed,
   relevant: Relevant,
-  group: [Schema.Types.Mixed]
+  transportation: Schema.Types.Mixed,
+  group: Schema.Types.Mixed
 });
 
 const uniqueValidator = require(APP_BASE + '/db/db').uniqueValidator;
